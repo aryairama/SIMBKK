@@ -179,6 +179,8 @@ return [
         Yajra\DataTables\DataTablesServiceProvider::class,
         //excel
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        //chart js
+        Fx3costa\LaravelChartJs\Providers\ChartjsServiceProvider::class,
     ],
 
     /*

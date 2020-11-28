@@ -34,6 +34,124 @@ class HomeController extends Controller
             $countSiswa = Siswa::all()->count();
             $countMale = Siswa::where('siswa_jk', 'L')->get()->count();
             $countFemale = Siswa::where('siswa_jk', 'P')->get()->count();
+            //chartjs keterserapan
+            $dataSekolah = Sekolah::orderBy('npsn', 'ASC')->get();
+            $dSekolah = array();
+            $ktr1 = array();
+            $ktr2 = array();
+            $ktr3 = array();
+            $ktr4 = array();
+            foreach ($dataSekolah as $key => $data) {
+                $dSekolah[$key] = $data->sekolah_nama;
+                $ktr1[$key] = $this->ExportExcelController->rekapSemua($data->npsn, 1);
+                $ktr2[$key] = $this->ExportExcelController->rekapSemua($data->npsn, 2);
+                $ktr3[$key] = $this->ExportExcelController->rekapSemua($data->npsn, 3);
+                $ktr4[$key] = $this->ExportExcelController->rekapSemua($data->npsn, 4);
+            }
+            $chartKeterserapan = app()->chartjs
+        ->name('chartKeterserapan')
+        ->type('bar')
+        ->size(['width' => 400, 'height' => 220])
+        ->labels($dSekolah)
+        ->datasets([
+            [
+                "label" => "Bekerja",
+                'backgroundColor' => "#ffa534",
+                'data' => $ktr1,
+            ],
+            [
+                "label" => "Melanjutkan",
+                'backgroundColor' => "#716aca",
+                'data' => $ktr2,
+            ],
+            [
+                "label" => "Wiraswasta",
+                'backgroundColor' => "#177dff",
+                'data' => $ktr3,
+            ],
+            [
+                "label" => "Belum Terserap",
+                'backgroundColor' => "#f3545d",
+                'data' => $ktr4,
+            ]
+        ])
+        ->options([]);
+            $chartKeterserapan->optionsRaw([
+            'responsive'=> true,
+            'maintainAspectRatio' => true,
+            'legend' => [
+                'display' => true,
+                'labels' => [
+                    'fontColor' => '#000'
+                ]
+            ],
+            'scales' => [
+                'xAxes' => [
+                    [
+                        'stacked' => true,
+                        'gridLines' => [
+                            'display' => false
+                        ]
+                    ]
+                        ],
+                'yAxes' => [
+                    [
+                        'stacked' => true,
+                        'gridLines' => [
+                            'display' => true
+                        ]
+                    ]
+                            ],
+            ]
+        ]);
+            //chartjs sekolah
+            $dSiswa = array();
+            $cSiswa = array();
+            foreach ($dataSekolah as $key => $data) {
+                $dSiswa[$key] = $data->sekolah_nama;
+                $cSiswa[$key] = $this->countSiswa($data->npsn);
+            }
+            $chartSiswa = app()->chartjs
+        ->name('chartSiswa')
+        ->type('bar')
+        ->size(['width' => 400, 'height' => 220])
+        ->labels($dSiswa)
+        ->datasets([
+            [
+                "label" => "Jumlah Siswa",
+                'backgroundColor' => "#ffa534",
+                'data' => $cSiswa,
+            ],
+        ])
+        ->options([]);
+            $chartSiswa->optionsRaw([
+            'responsive'=> true,
+            'maintainAspectRatio' => true,
+            'legend' => [
+                'display' => true,
+                'labels' => [
+                    'fontColor' => '#000'
+                ]
+            ],
+            'scales' => [
+                'xAxes' => [
+                    [
+                        'stacked' => false,
+                        'gridLines' => [
+                            'display' => false
+                        ]
+                    ]
+                        ],
+                'yAxes' => [
+                    [
+                        'stacked' => false,
+                        'gridLines' => [
+                            'display' => true
+                        ]
+                    ]
+                            ],
+            ]
+        ]);
             //count keterserapan
             $countBekerja = Siswa::has('sekolahs')->has('keterserapans')
             ->whereHas('keterserapans', function ($query) {
@@ -62,6 +180,8 @@ class HomeController extends Controller
                     'countMelanjutkan',
                     'countWiraswasta',
                     'countBelumTerserap',
+                    'chartKeterserapan',
+                    'chartSiswa'
                 )
             );
         } elseif (Gate::allows('roleOperatorSekolah')) {
@@ -108,5 +228,9 @@ class HomeController extends Controller
         } else {
             abort(403);
         }
+    }
+    public function countSiswa($npsn)
+    {
+        return Siswa::where('siswa_sekolah', $npsn)->get()->count();
     }
 }

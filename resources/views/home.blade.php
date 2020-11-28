@@ -108,17 +108,22 @@ Dashboard
     </div>
     @endcan
 </div>
-{{-- <div class="row">
+<div class="row">
+    @can('roleAdmin')
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header"></div>
+            <div class="card-header">
+                <h4 class="card-title">Siswa Persekolah</h4>
+            </div>
             <div class="card-body">
                 <div>
+                    {!! $chartSiswa->render() !!}
                 </div>
             </div>
         </div>
     </div>
-</div> --}}
+    @endcan
+</div>
 <div class="row">
     @can('roleAdminOpeartor')
     <div class="col-sm-6 col-md-3">
@@ -193,6 +198,22 @@ Dashboard
                             <h4 class="card-title">{{ $countBelumTerserap }}</h4>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endcan
+</div>
+<div class="row">
+    @can('roleAdmin')
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Keterserapan Siswa</h4>
+            </div>
+            <div class="card-body">
+                <div>
+                    {!! $chartKeterserapan->render() !!}
                 </div>
             </div>
         </div>
