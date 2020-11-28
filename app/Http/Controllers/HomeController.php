@@ -186,6 +186,55 @@ class HomeController extends Controller
             );
         } elseif (Gate::allows('roleOperatorSekolah')) {
             $npsn = Auth::user()->npsn;
+            //chart angkatan persekolah
+            $dAngkatan = array();
+            $dSekolah = array();
+            $angkatan = \App\Angkatan::all();
+            foreach ($angkatan as $key => $value) {
+                $dSekolah[$key] = $value->angkatan_ket;
+                $dAngkatan[$key] = $this->countSiswaPerAngkatanPerSekolah($npsn, $value->angkatan_id);
+            }
+            $chartSiswaPerangkatan = app()->chartjs
+        ->name('chartSiswaPerangkatan')
+        ->type('bar')
+        ->size(['width' => 400, 'height' => 220])
+        ->labels($dSekolah)
+        ->datasets([
+            [
+                "label" => "Jumlah Siswa",
+                'backgroundColor' => "#ffa534",
+                'data' => $dAngkatan,
+            ],
+        ])
+        ->options([]);
+            $chartSiswaPerangkatan->optionsRaw([
+            'responsive'=> true,
+            'maintainAspectRatio' => true,
+            'legend' => [
+                'display' => true,
+                'labels' => [
+                    'fontColor' => '#000'
+                ]
+            ],
+            'scales' => [
+                'xAxes' => [
+                    [
+                        'stacked' => false,
+                        'gridLines' => [
+                            'display' => false
+                        ]
+                    ]
+                        ],
+                'yAxes' => [
+                    [
+                        'stacked' => false,
+                        'gridLines' => [
+                            'display' => true
+                        ]
+                    ]
+                            ],
+            ]
+        ]);
             //count siswa
             $countSiswa = Siswa::has('sekolahs')->whereHas('sekolahs', function ($query) use ($npsn) {
                 $query->where('npsn', $npsn);
@@ -223,7 +272,7 @@ class HomeController extends Controller
             })->get()->count();
             return view(
                 'home',
-                compact('countSiswa', 'countMale', 'countFemale', 'countBekerja', 'countMelanjutkan', 'countWiraswasta', 'countBelumTerserap')
+                compact('countSiswa', 'countMale', 'countFemale', 'countBekerja', 'countMelanjutkan', 'countWiraswasta', 'countBelumTerserap', 'chartSiswaPerangkatan')
             );
         } else {
             abort(403);
@@ -232,5 +281,9 @@ class HomeController extends Controller
     public function countSiswa($npsn)
     {
         return Siswa::where('siswa_sekolah', $npsn)->get()->count();
+    }
+    public function countSiswaPerAngkatanPerSekolah($npsn, $angkatan_id)
+    {
+        return Siswa::where('siswa_sekolah', $npsn)->where('siswa_angkatan', $angkatan_id)->count();
     }
 }

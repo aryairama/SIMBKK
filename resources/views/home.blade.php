@@ -123,6 +123,20 @@ Dashboard
         </div>
     </div>
     @endcan
+    @can('roleOperatorSekolah')
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Siswa Perangkatan</h4>
+            </div>
+            <div class="card-body">
+                <div>
+                    {!! $chartSiswaPerangkatan->render() !!}
+                </div>
+            </div>
+        </div>
+    </div>
+    @endcan
 </div>
 <div class="row">
     @can('roleAdminOpeartor')
