@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use Illuminate\Support\Facades\Gate;
+use File;
 
 class ImportExcelController extends Controller
 {
@@ -48,8 +49,12 @@ class ImportExcelController extends Controller
     public function preview(Request $request)
     {
         $request->validate([
-            'export_siswa' => 'mimes:xlsx|required',
+            'export_siswa' => 'required',
         ]);
+        $extension = File::extension($request->export_siswa->getClientOriginalName());
+        if ($extension !== "xlsx") {
+            return \Response::json(422);
+        }
         $error = array();
         $angkatans = array();
         $keterserapans = array();
@@ -69,7 +74,11 @@ class ImportExcelController extends Controller
             $komlis[$key] = $komli['komli_id'];
         }
         $preview = $reader->load($request->file('export_siswa'));
-        $previewExcel = $preview->getActiveSheet()->toArray();
+        try {
+            $previewExcel = $preview->getActiveSheet()->toArray();
+        } catch (\Throwable $th) {
+            return \Response::json(500);
+        }
         if ((strval($previewExcel['0']['0'] !== "NISN"))
         || (strval($previewExcel['0']['1'] !== "Nama"))
         || (strval($previewExcel['0']['2'] !== "Angkatan"))
@@ -81,6 +90,8 @@ class ImportExcelController extends Controller
         || (strval($previewExcel['0']['8'] !== "Keterserapan"))
         || (strval($previewExcel['0']['9'] !== "Keterangan"))) {
             return \Response::json(415);
+        } elseif (count($previewExcel) < 2) {
+            return \Response::json(501);
         }
         for ($i = 1; $i < count($previewExcel); $i++) {
             $nama[$i]['nisn'] = $previewExcel[$i]['0'];

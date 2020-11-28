@@ -91,6 +91,7 @@ Import Data Siswa
     let drEvent = $('#export_siswa').dropify();
     drEvent.on('dropify.afterClear', function(event, element){
     table.clear().draw();
+    $('.card-footer').empty()
 });
     $('.form-excel').on('submit',function(e){
         e.preventDefault()
@@ -107,6 +108,15 @@ Import Data Siswa
                 $(".preloader2").addClass('d-none').fadeOut("slow");
                 if(ress == 415){
                     notifAlert1("Error","Format excel tidak sesuai dengan format yang ada","error")
+                } else if(ress == 501){
+                    notifAlert1("Warning","File excel tidak boleh kosong","warning")
+                } else if(ress == 422){
+                    $('.dropify-wrapper').addClass('has-error')
+                    $('.dropify-error').empty().html("File harus berformat .xlsx")
+                    $('.card-footer').empty()
+                    $(".dropify-clear").trigger("click");
+                }else if(ress == 500){
+                    notifAlert1("Error","File tidak bisa dibaca","error")
                 } else {
                 appendDataTable(ress)
                 seveImportSiswa(ress)
@@ -117,9 +127,9 @@ Import Data Siswa
                     validPreview(err)
                 } else if(err.status == 422){
                     $('.dropify-wrapper').addClass('has-error')
-                    $.each(JSON.parse(err.responseText),function(key,error){
-                        $('.dropify-error').empty().html(error.export_siswa)
-                    })
+                    $('.dropify-error').empty().html("Input file tidak boleh kosong")
+                    $('.card-footer').empty()
+                    $(".dropify-clear").trigger("click");
                 }
                 table.clear().draw();
                 $('.card-footer').empty()

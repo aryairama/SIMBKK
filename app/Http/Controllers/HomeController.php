@@ -107,9 +107,11 @@ class HomeController extends Controller
             //chartjs sekolah
             $dSiswa = array();
             $cSiswa = array();
+            $dWarna = array();
             foreach ($dataSekolah as $key => $data) {
                 $dSiswa[$key] = $data->sekolah_nama;
                 $cSiswa[$key] = $this->countSiswa($data->npsn);
+                $dWarna[$key] = $this->random_color();
             }
             $chartSiswa = app()->chartjs
         ->name('chartSiswa')
@@ -119,7 +121,7 @@ class HomeController extends Controller
         ->datasets([
             [
                 "label" => "Jumlah Siswa",
-                'backgroundColor' => "#ffa534",
+                'backgroundColor' =>  $dWarna,
                 'data' => $cSiswa,
             ],
         ])
@@ -189,20 +191,23 @@ class HomeController extends Controller
             //chart angkatan persekolah
             $dAngkatan = array();
             $dSekolah = array();
+            $dWarna = array();
             $angkatan = \App\Angkatan::all();
             foreach ($angkatan as $key => $value) {
                 $dSekolah[$key] = $value->angkatan_ket;
                 $dAngkatan[$key] = $this->countSiswaPerAngkatanPerSekolah($npsn, $value->angkatan_id);
+                $dWarna[$key] = $this->random_color();
             }
+
             $chartSiswaPerangkatan = app()->chartjs
         ->name('chartSiswaPerangkatan')
-        ->type('bar')
+        ->type('doughnut')
         ->size(['width' => 400, 'height' => 220])
         ->labels($dSekolah)
         ->datasets([
             [
                 "label" => "Jumlah Siswa",
-                'backgroundColor' => "#ffa534",
+                'backgroundColor' => $dWarna,
                 'data' => $dAngkatan,
             ],
         ])
@@ -285,5 +290,15 @@ class HomeController extends Controller
     public function countSiswaPerAngkatanPerSekolah($npsn, $angkatan_id)
     {
         return Siswa::where('siswa_sekolah', $npsn)->where('siswa_angkatan', $angkatan_id)->count();
+    }
+
+    public function random_color_part()
+    {
+        return str_pad(dechex(mt_rand(0, 255)), 2, '0', STR_PAD_LEFT);
+    }
+
+    public function random_color()
+    {
+        return "#".$this->random_color_part() .  $this->random_color_part() .  $this->random_color_part();
     }
 }
