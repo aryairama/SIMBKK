@@ -35,9 +35,9 @@
                         </div>
                         <div class="">
                             <!-- <span class="fa fa-lock"></span> -->
-                            <input id="password" type="password" class="form__input @error(" password") is-invalid
+                            <input id="password" type="password" class="form__input @error("password") is-invalid
                                 @enderror" name="password" required autocomplete="current-password"
-                                placeholder="Password">
+                                placeholder="password">
                             @error('password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

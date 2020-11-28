@@ -42,5 +42,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('rekap/rekapsemuasekolah', 'ExportExcelController@rekapSemuaSekolah')->name('export.semua.sekolah');
     Route::post('rekap/rekapangkatan', 'ExportExcelController@rekapAngkatan')->name('export.per.angkatan');
     Route::post('rekap/rekapkomli', 'ExportExcelController@rekapKomli')->name('export.per.komli');
+    //Router Import Excel
+    Route::get('import', 'ImportExcelController@index')->name('import.index');
+    Route::post('import/preview', 'ImportExcelController@preview')->name('import.preview');
+    Route::post('import/save', 'ImportExcelController@saveImportExcel')->name('import.save');
+    Route::get('import/format', function () {
+        return response()->download('data_siswa/format.xlsx');
+    })->name('import.format');
 });
-Route::get('test', 'ImportExcelController@test');
+// Route::get('test', 'ImportExcelController@test');

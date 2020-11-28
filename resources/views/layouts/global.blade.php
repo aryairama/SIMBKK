@@ -78,6 +78,16 @@
                                 <i class="fa fa-search"></i>
                             </a>
                         </li>
+                        {{--  --}}
+                        @can('roleOperatorSekolah')
+                        <li class="nav-item dropdown hidden-caret">
+                            <a class="nav-link dropdown-toggle" href="{{ route('import.index') }}"  role="button">
+                                <i class="fas fa-file-upload"></i>
+                                <span class="notification">1</span>
+                            </a>
+                        </li>
+                        @endcan
+                        {{--  --}}
                         <li class="nav-item dropdown hidden-caret">
                             <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"
                                 aria-expanded="false">
@@ -246,6 +256,14 @@
                                 <p>Rekap</p>
                             </a>
                         </li>
+                        @can('roleOperatorSekolah')
+                        <li class="nav-item {{ Route::is('import.index') ? 'active' : '' }}">
+                            <a href="{{ route('import.index') }}">
+                                <i class="fas fa-file-upload"></i>
+                                <p>Import Data Siswa</p>
+                            </a>
+                        </li>
+                        @endcan
                     </ul>
                 </div>
             </div>
