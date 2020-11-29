@@ -66,10 +66,18 @@ function deleteForm(id) {
                 url: `sekolah/${id}`,
                 method: `DELETE`,
                 success: function (ress) {
-                    notifAlert1('Sukses', 'Data Berhasil Dihapus', 'success')
+                    if (ress === "delete") {
+                        notifAlert1('Sukses', 'Data Berhasil Dihapus', 'success')
+                    } else if(ress == 403){
+                        notifAlert1('Error', 'Data tidak dapat dihapus,karena terkait dengan data yang lain', 'error')
+                    } else if(ress == 404){
+                        notifAlert1('Error', 'Data tidak ada', 'error')
+                    }
                 },
                 error: function (err) {
-
+                    if(err.status == 404){
+                        notifAlert1('Error', 'Data tidak ada', 'error')
+                    }
                 }
             })
         }
@@ -237,17 +245,22 @@ $(function () {
                     data: new FormData($('.form-data')[0]),
                     processData: false,
                     contentType: false,
-                    success: function () {
+                    success: function (ress) {
                         if (save_method == "add") {
                             notifAlert1("Sukses", "Data sekolah berhasil disimpan",
                                 "success")
                         } else if (save_method == "update") {
                             notifAlert1("sukses", "Data sekolah berhasil diperbarui",
                                 "success")
+                        } else if(ress.status == 404){
+                            notifAlert1('Error', 'Data tidak ada', 'error')
                         }
                         $('#modal_dialog').modal('hide');
                     },
                     error: function (xhr, status, error) {
+                        if(xhr.status == 404){
+                            notifAlert1('Error', 'Data tidak ada', 'error')
+                        }
                         let all_error = JSON.parse(xhr.responseText)
                         $.each(all_error.errors, function (key, error) {
                             $(`#${key}`).parent().append(`

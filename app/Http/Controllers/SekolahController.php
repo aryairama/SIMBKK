@@ -95,7 +95,11 @@ class SekolahController extends Controller
     public function update(SekolahRequest $request)
     {
         $validated = $request->validated();
-        $sekolah = Sekolah::findOrFail(decrypt($request->id));
+        try {
+            $sekolah = Sekolah::findOrFail(decrypt($request->id));
+        } catch (DecryptException $th) {
+            return \Response::json(404);
+        }
         if ($sekolah->npsn != $request->npsn) {
             $sekolah->npsn = $request->npsn;
         }
@@ -120,9 +124,16 @@ class SekolahController extends Controller
     {
         try {
             $sekolah = Sekolah::findOrFail(decrypt($id));
-            $sekolah->delete();
         } catch (DecryptException $th) {
-            throw $th;
+            return \Response::json(404);
+        }
+        $checkSekolah = \App\Siswa::where('siswa_sekolah', decrypt($id))->get();
+        $checkSekolah = \count($checkSekolah);
+        if ($checkSekolah > 0) {
+            return \Response::json(403);
+        } else {
+            $sekolah->delete();
+            return "delete";
         }
     }
 }

@@ -70,7 +70,13 @@ class KeterserapanController extends Controller
     {
         $this->authorize('roleAdmin');
         $keterserpan = Keterserapan::findOrFail($id);
-        $keterserpan->delete();
-        return "delete";
+        $checkKeterserapan = \App\Siswa::where('siswa_keterserapan', $id)->get();
+        $checkKeterserapan = \count($checkKeterserapan);
+        if ($checkKeterserapan > 0) {
+            return \Response::json(403);
+        } else {
+            $keterserpan->delete();
+            return "delete";
+        }
     }
 }

@@ -115,7 +115,13 @@ class AngkatanController extends Controller
     {
         $this->authorize('roleAdmin');
         $angkatan = Angkatan::findOrFail($id);
-        $angkatan->delete();
-        return "delete";
+        $checkAngkatan = \App\Siswa::where('siswa_angkatan', $id)->get();
+        $checkAngkatan = \count($checkAngkatan);
+        if ($checkAngkatan > 0) {
+            return \Response::json(403);
+        } else {
+            $angkatan->delete();
+            return "delete";
+        }
     }
 }

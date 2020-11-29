@@ -110,7 +110,13 @@ class KomliController extends Controller
     {
         $this->authorize('roleAdmin');
         $komli = Komli::findOrFail($id);
-        $komli->delete();
-        return "delete";
+        $checkKomli = \App\Siswa::where('siswa_komli', $id)->get();
+        $checkKomli = \count($checkKomli);
+        if ($checkKomli > 0) {
+            return \Response::json(403);
+        } else {
+            $komli->delete();
+            return "delete";
+        }
     }
 }

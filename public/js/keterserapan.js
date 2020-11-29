@@ -48,10 +48,14 @@ function deleteForm(id) {
                 success: function (ress) {
                     if (ress === "delete") {
                         notifAlert1('Sukses', 'Data Berhasil Dihapus', 'success')
+                    } else if(ress == 403){
+                        notifAlert1('Error', 'Data tidak dapat dihapus,karena terkait dengan data yang lain', 'error')
                     }
                 },
                 error: function (err) {
-                    console.log(err);
+                    if(err.status == 404){
+                        notifAlert1('Error', 'Data tidak ada', 'error')
+                    }
                 }
             })
         }
@@ -166,6 +170,9 @@ $(function () {
                         $('#modal_dialog').modal('hide')
                     },
                     error: function (xhr, status, error) {
+                        if(xhr.status == 404){
+                            notifAlert1('Error', 'Data tidak ada', 'error')
+                        }
                         let all_error = JSON.parse(xhr.responseText)
                         $.each(all_error.errors, function (key, error) {
                             $(`#${key}`).parent().append(`
