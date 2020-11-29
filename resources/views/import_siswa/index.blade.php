@@ -80,7 +80,7 @@ Import Data Siswa
         <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only text-black-50">Loading...</span>
         </div>
-        <p class="text-center mt-4">Uploud File Axcel</p>
+        <p class="text-center mt-4 text-loader"></p>
     </div>
 </div>
 @endsection
@@ -103,6 +103,7 @@ Import Data Siswa
             contentType: false,
             beforeSend : function(){
                 $(".preloader2").removeClass('d-none').fadeIn("slow");
+                $('.text-loader').html('Uploud File Axcel');
             },
             success : function(ress){
                 $(".preloader2").addClass('d-none').fadeOut("slow");
@@ -158,7 +159,8 @@ Import Data Siswa
     }
     function seveImportSiswa(siswa){
         let data = new FormData();
-        $.each(siswa,function(index,value){
+        $('.save_import').on('click',function(){
+            $.each(siswa,function(index,value){
             data.append(`export_siswa[${index}][nisn]`,value.nisn)
             data.append(`export_siswa[${index}][siswa_nama]`,value.siswa_nama)
             data.append(`export_siswa[${index}][siswa_angkatan]`,value.siswa_angkatan)
@@ -171,7 +173,6 @@ Import Data Siswa
             data.append(`export_siswa[${index}][keterangan]`,value.keterangan)
         })
         data.append('_method',"POST")
-        $('.card-footer').on('click','.save_import',function(){
             $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -183,7 +184,12 @@ Import Data Siswa
                 data : data,
                 processData: false,
                 contentType: false,
+                beforeSend : function(){
+                $('.text-loader').html('Proses simpan ke database');
+                $(".preloader2").removeClass('d-none').fadeIn("slow");
+                },
                 success : function(ress){
+                    $(".preloader2").addClass('d-none').fadeOut("slow");
                     if(ress == 200){
                         notifAlert1("Sukses","Data siswa berhasil disimpan","success")
                     }
