@@ -49,5 +49,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('import/format', function () {
         return response()->download('data_siswa/format.xlsx');
     })->name('import.format');
+    //Router ProfileSekolah
+    Route::resource('profile', 'ProfileSekolahController');
 });
 // Route::get('test', 'ImportExcelController@test');

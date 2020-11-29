@@ -112,15 +112,20 @@
                                             <p class="text-muted">
                                                 @if(Auth::user()->roles == "operator_sekolah")
                                                 {{ Auth::user()->sekolahs->sekolah_email }}
-                                                @endif</p><a href="profile.html"
+                                                @endif</p>
+                                                @can('roleOperatorSekolah')
+                                                <a href="{{ route('profile.index') }}"
                                                 class="btn btn-rounded btn-danger btn-sm mt-1">View
                                                 Profile</a>
+                                                @endcan
                                         </div>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Edit Profile</a>
+                                    @can('roleOperatorSekolah')
+                                    <a class="dropdown-item" href="{{ route('profile.index') }}">Edit Profile</a>
+                                    @endcan
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST">
                                         <button type="submit" class="dropdown-item">
                                             @csrf
@@ -160,15 +165,17 @@
                                 </span>
                             </a>
                             <div class="clearfix"></div>
+                            @can('roleOperatorSekolah')
                             <div class="collapse in" id="collapseExample">
                                 <ul class="nav">
                                     <li>
-                                        <a href="#edit">
+                                        <a href="{{ route('profile.index') }}">
                                             <span class="link-collapse">Edit Profile</span>
                                         </a>
                                     </li>
                                 </ul>
                             </div>
+                            @endcan
                         </div>
                     </div>
                     <ul class="nav">
