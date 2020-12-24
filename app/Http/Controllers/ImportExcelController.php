@@ -130,21 +130,23 @@ class ImportExcelController extends Controller
 
     public function saveImportExcel(Request $request)
     {
+        $data = array();
         foreach ($request->export_siswa as $key => $export) {
-            $siswa = new \App\Siswa();
-            $siswa->nisn = $export['nisn'];
-            $siswa->siswa_nama = $export['siswa_nama'];
-            $siswa->siswa_sekolah = \Auth::user()->npsn;
-            $siswa->siswa_angkatan = $export['siswa_angkatan'];
-            $siswa->tempat_lahir = $export['tempat_lahir'];
-            $siswa->tanggal_lahir = $export['tanggal_lahir'];
-            $siswa->siswa_jk = $export['siswa_jk'];
-            $siswa->siswa_komli = $export['siswa_komli'];
-            $siswa->siswa_prestasi = $export['siswa_prestasi'];
-            $siswa->siswa_keterserapan = $export['siswa_keterserapan'];
-            $siswa->keterangan = $export['keterangan'];
-            $siswa->save();
+            $data[] = [
+                "nisn" => $export['nisn'],
+                "siswa_nama" => $export['siswa_nama'],
+                "siswa_sekolah" => \Auth::user()->npsn,
+                "siswa_angkatan" => $export['siswa_angkatan'],
+                "tempat_lahir" => $export['tempat_lahir'],
+                "tanggal_lahir" => $export['tanggal_lahir'],
+                "siswa_jk" => $export['siswa_jk'],
+                "siswa_komli" => $export['siswa_komli'],
+                "siswa_prestasi" => $export['siswa_prestasi'],
+                "siswa_keterserapan" => $export['siswa_keterserapan'],
+                "keterangan" => $export['keterangan'],
+            ];
         }
+        Siswa::insert($data);
         return \Response::json(200);
     }
 }

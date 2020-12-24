@@ -153,8 +153,9 @@ Import Data Siswa
                 value.siswa_prestasi,
                 value.siswa_keterserapan,
                 value.keterangan
-            ]).draw(false)
+            ])
         })
+        table.draw()
         $('.card-footer').empty().append('<button class="btn btn-secondary save_import">Simpan</button>')
     }
     function seveImportSiswa(siswa){
