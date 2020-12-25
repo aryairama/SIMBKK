@@ -5,8 +5,6 @@ Import Data Siswa
 @section('css')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/fonts/dropify.ttf">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/fonts/dropify.svg">
 @endsection
 @section('content')
 <div class="page-header">
@@ -43,6 +41,7 @@ Import Data Siswa
             <div class="card-header">
                 <div class="card-head-row">
                     <div class="card-title">Preview Import Excel</div>
+                    <div class="card-tools remove-export"></div>
                 </div>
             </div>
             <div class="card-body log_error">
@@ -89,11 +88,10 @@ Import Data Siswa
 <script>
     var table = $('#data_table_export_siswa').DataTable();
     let drEvent = $('#export_siswa').dropify();
-    drEvent.on('dropify.afterClear', function(event, element){
-    table.clear().draw();
-    $('.card-footer').empty()
-});
     $('.form-excel').on('submit',function(e){
+        $('.remove-export').empty()
+        $('.card-footer').empty()
+        table.clear().draw();
         e.preventDefault()
         $.ajax({
             url : `{{ route('import.preview') }}`,
@@ -126,6 +124,7 @@ Import Data Siswa
             error : function(err){
                 if(err.status == 403 ){
                     validPreview(err)
+                    $(".dropify-clear").trigger("click");
                 } else if(err.status == 422){
                     $('.dropify-wrapper').addClass('has-error')
                     $('.dropify-error').empty().html("Input file tidak boleh kosong")
@@ -139,6 +138,7 @@ Import Data Siswa
         })
     })
     function appendDataTable(data){
+        $(".dropify-clear").trigger("click");
         $('.log_error').empty()
         table.clear().draw();
         $.each(data,function(index,value){
@@ -156,6 +156,7 @@ Import Data Siswa
             ])
         })
         table.draw()
+        $('.remove-export').empty().append('<button class="btn btn-danger btn-round btn-sm btn-remove-export">Hapus</button>')
         $('.card-footer').empty().append('<button class="btn btn-secondary save_import">Simpan</button>')
     }
     function seveImportSiswa(siswa){
@@ -224,9 +225,17 @@ Import Data Siswa
     ).then((result) => {
         if (result.isConfirmed) {
             $(".dropify-clear").trigger("click");
+            $('.card-footer').empty()
+            $('.remove-export').empty()
             table.clear().draw();
         }
     })
 }
+
+    $('.remove-export').on('click','.btn-remove-export',function(){
+        table.clear().draw();
+        $('.card-footer').empty()
+        $('.remove-export').empty()
+    })
 </script>
 @endsection

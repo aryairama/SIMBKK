@@ -79,16 +79,16 @@ class ImportExcelController extends Controller
         } catch (\Throwable $th) {
             return \Response::json(500);
         }
-        if ((strval($previewExcel['0']['0'] !== "NISN"))
-        || (strval($previewExcel['0']['1'] !== "Nama"))
-        || (strval($previewExcel['0']['2'] !== "Angkatan"))
-        || (strval($previewExcel['0']['3'] !== "Tempat Lahir"))
-        || (strval($previewExcel['0']['4'] !== "Tanggl Lahir"))
-        || (strval($previewExcel['0']['5'] !== "Jenis kelamin"))
-        || (strval($previewExcel['0']['6'] !== "Komli"))
-        || (strval($previewExcel['0']['7'] !== "Prestasi"))
-        || (strval($previewExcel['0']['8'] !== "Keterserapan"))
-        || (strval($previewExcel['0']['9'] !== "Keterangan"))) {
+        if (strval($previewExcel['0']['0']) !== "NISN"
+        || strval($previewExcel['0']['1']) !== "Nama"
+        || strval($previewExcel['0']['2']) !== "Angkatan"
+        || strval($previewExcel['0']['3']) !== "Tempat Lahir"
+        || strval($previewExcel['0']['4']) !== "Tanggl Lahir"
+        || strval($previewExcel['0']['5']) !== "Jenis kelamin"
+        || strval($previewExcel['0']['6']) !== "Komli"
+        || strval($previewExcel['0']['7']) !== "Prestasi"
+        || strval($previewExcel['0']['8']) !== "Keterserapan"
+        || strval($previewExcel['0']['9']) !== "Keterangan") {
             return \Response::json(415);
         } elseif (count($previewExcel) < 2) {
             return \Response::json(501);
@@ -104,20 +104,20 @@ class ImportExcelController extends Controller
             $nama[$i]['siswa_prestasi'] = $previewExcel[$i]['7'];
             $nama[$i]['siswa_keterserapan'] = $previewExcel[$i]['8'];
             $nama[$i]['keterangan'] = $previewExcel[$i]['9'];
-            if ((!in_array($nama[$i]['siswa_angkatan'], $angkatans))
-            ||(!in_array($nama[$i]['siswa_komli'], $komlis))
-            ||(!in_array($nama[$i]['siswa_keterserapan'], $keterserapans))) {
+            if (!in_array($nama[$i]['siswa_angkatan'], $angkatans, true)
+            || !in_array($nama[$i]['siswa_komli'], $komlis, true)
+            || !in_array($nama[$i]['siswa_keterserapan'], $keterserapans, true)) {
                 $error[$i]['angkatan'] = null;
                 $error[$i]['komli'] = null;
                 $error[$i]['keterserapan'] = null;
             }
-            if (!in_array($nama[$i]['siswa_angkatan'], $angkatans)) {
+            if (!in_array($nama[$i]['siswa_angkatan'], $angkatans, true)) {
                 $error[$i]['angkatan'] = "NISN : " . $nama[$i]['nisn'] . ",Nama Siswa : ".$nama[$i]['siswa_nama'].",Nilai angkatan tidak sesuai dengan data Angkatan yang ada";
             }
-            if (!in_array($nama[$i]['siswa_komli'], $komlis)) {
+            if (!in_array($nama[$i]['siswa_komli'], $komlis, true)) {
                 $error[$i]['komli'] = "NISN : " . $nama[$i]['nisn'] . ",Nama Siswa : ".$nama[$i]['siswa_nama'].",Nilai Komli tidak sesuai dengan data Komli yang ada";
             }
-            if (!in_array($nama[$i]['siswa_keterserapan'], $keterserapans)) {
+            if (!in_array($nama[$i]['siswa_keterserapan'], $keterserapans, true)) {
                 $error[$i]['keterserapan'] = "NISN : " . $nama[$i]['nisn'] . ",Nama Siswa : ".$nama[$i]['siswa_nama'].",Nilai Keterserapan tidak sesuai dengan data Keterserapan yang ada";
             }
         }
