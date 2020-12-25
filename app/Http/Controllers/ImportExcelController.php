@@ -146,7 +146,9 @@ class ImportExcelController extends Controller
                 "keterangan" => $export['keterangan'],
             ];
         }
-        Siswa::insert($data);
+        foreach (array_chunk($data, 1000) as $dataTrim) {
+            Siswa::insert($dataTrim);
+        }
         return \Response::json(200);
     }
 }
