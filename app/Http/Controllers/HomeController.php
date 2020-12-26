@@ -30,10 +30,10 @@ class HomeController extends Controller
     {
         if (Gate::allows('roleAdmin')) {
             $sekolah = Sekolah::all();
-            $countSekolah = Sekolah::all()->count();
-            $countSiswa = Siswa::all()->count();
-            $countMale = Siswa::where('siswa_jk', 'L')->get()->count();
-            $countFemale = Siswa::where('siswa_jk', 'P')->get()->count();
+            $countSekolah = Sekolah::count();
+            $countSiswa = Siswa::count();
+            $countMale = Siswa::where('siswa_jk', 'L')->count();
+            $countFemale = Siswa::where('siswa_jk', 'P')->count();
             //chartjs keterserapan
             $dataSekolah = Sekolah::orderBy('npsn', 'ASC')->get();
             $dSekolah = array();
@@ -158,19 +158,19 @@ class HomeController extends Controller
             $countBekerja = Siswa::has('sekolahs')->has('keterserapans')
             ->whereHas('keterserapans', function ($query) {
                 $query->where('keterserapan_id', 1);
-            })->get()->count();
+            })->count();
             $countMelanjutkan = Siswa::has('sekolahs')->has('keterserapans')
             ->whereHas('keterserapans', function ($query) {
                 $query->where('keterserapan_id', 2);
-            })->get()->count();
+            })->count();
             $countWiraswasta = Siswa::has('sekolahs')->has('keterserapans')
             ->whereHas('keterserapans', function ($query) {
                 $query->where('keterserapan_id', 3);
-            })->get()->count();
+            })->count();
             $countBelumTerserap = Siswa::has('sekolahs')->has('keterserapans')
             ->whereHas('keterserapans', function ($query) {
                 $query->where('keterserapan_id', 4);
-            })->get()->count();
+            })->count();
             return view(
                 'home',
                 compact(
@@ -243,38 +243,38 @@ class HomeController extends Controller
             //count siswa
             $countSiswa = Siswa::has('sekolahs')->whereHas('sekolahs', function ($query) use ($npsn) {
                 $query->where('npsn', $npsn);
-            })->get()->count();
+            })->count();
             $countMale =  Siswa::has('sekolahs')->whereHas('sekolahs', function ($query) use ($npsn) {
                 $query->where('npsn', $npsn);
-            })->where('siswa_jk', 'L')->get()->count();
+            })->where('siswa_jk', 'L')->count();
             $countFemale = Siswa::has('sekolahs')->whereHas('sekolahs', function ($query) use ($npsn) {
                 $query->where('npsn', $npsn);
-            })->where('siswa_jk', 'P')->get()->count();
+            })->where('siswa_jk', 'P')->count();
             //count keterserapan
             $countBekerja = Siswa::has('sekolahs')->has('keterserapans')
             ->whereHas('sekolahs', function ($query) use ($npsn) {
                 $query->where('npsn', $npsn);
             })->whereHas('keterserapans', function ($query) {
                 $query->where('keterserapan_id', 1);
-            })->get()->count();
+            })->count();
             $countMelanjutkan = Siswa::has('sekolahs')->has('keterserapans')
             ->whereHas('sekolahs', function ($query) use ($npsn) {
                 $query->where('npsn', $npsn);
             })->whereHas('keterserapans', function ($query) {
                 $query->where('keterserapan_id', 2);
-            })->get()->count();
+            })->count();
             $countWiraswasta = Siswa::has('sekolahs')->has('keterserapans')
             ->whereHas('sekolahs', function ($query) use ($npsn) {
                 $query->where('npsn', $npsn);
             })->whereHas('keterserapans', function ($query) {
                 $query->where('keterserapan_id', 3);
-            })->get()->count();
+            })->count();
             $countBelumTerserap = Siswa::has('sekolahs')->has('keterserapans')
             ->whereHas('sekolahs', function ($query) use ($npsn) {
                 $query->where('npsn', $npsn);
             })->whereHas('keterserapans', function ($query) {
                 $query->where('keterserapan_id', 4);
-            })->get()->count();
+            })->count();
             return view(
                 'home',
                 compact('countSiswa', 'countMale', 'countFemale', 'countBekerja', 'countMelanjutkan', 'countWiraswasta', 'countBelumTerserap', 'chartSiswaPerangkatan')
@@ -285,7 +285,7 @@ class HomeController extends Controller
     }
     public function countSiswa($npsn)
     {
-        return Siswa::where('siswa_sekolah', $npsn)->get()->count();
+        return Siswa::where('siswa_sekolah', $npsn)->count();
     }
     public function countSiswaPerAngkatanPerSekolah($npsn, $angkatan_id)
     {
