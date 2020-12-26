@@ -116,7 +116,7 @@ class ExportExcelController extends Controller
                 $query->where('komli_id', $komli);
             })->whereHas('keterserapans', function ($query) use ($id) {
                 $query->where("keterserapan_id", $id);
-            })->get()->count();
+            })->count();
         } else {
             abort(403);
         }
@@ -127,7 +127,7 @@ class ExportExcelController extends Controller
         if (Gate::allows('roleAdminOpeartor')) {
             return Siswa::where('siswa_sekolah', $npsn)->whereHas('komlis', function ($query) use ($komli) {
                 $query->where('komli_id', $komli);
-            })->has('keterserapans')->get()->count();
+            })->has('keterserapans')->count();
         } else {
             abort(403);
         }
@@ -220,7 +220,7 @@ class ExportExcelController extends Controller
         if (Gate::allows('roleAdmin')) {
             return Siswa::where('siswa_sekolah', $npsn)->where('siswa_komli', $komli)->whereHas('keterserapans', function ($query) use ($keterserapan) {
                 $query->where('keterserapan_id', $keterserapan);
-            })->get()->count();
+            })->count();
         } else {
             abort(403);
         }
@@ -229,7 +229,7 @@ class ExportExcelController extends Controller
     public static function rekapPerKomliTotal($npsn, $komli)
     {
         if (Gate::allows('roleAdmin')) {
-            return Siswa::where('siswa_sekolah', $npsn)->where('siswa_komli', $komli)->has('keterserapans')->get()->count();
+            return Siswa::where('siswa_sekolah', $npsn)->where('siswa_komli', $komli)->has('keterserapans')->count();
         } else {
             abort(403);
         }
@@ -327,7 +327,7 @@ class ExportExcelController extends Controller
         if (Gate::allows('roleAdminOpeartor')) {
             return Siswa::where('siswa_sekolah', $npsn)->where('siswa_angkatan', $angkatan)->whereHas('keterserapans', function ($query) use ($keterserapan) {
                 $query->where('keterserapan_id', $keterserapan);
-            })->get()->count();
+            })->count();
         } else {
             abort(403);
         }
@@ -336,7 +336,7 @@ class ExportExcelController extends Controller
     public static function rekapPerangkatanTotal($npsn, $angkatan)
     {
         if (Gate::allows('roleAdminOpeartor')) {
-            return Siswa::where('siswa_sekolah', $npsn)->where('siswa_angkatan', $angkatan)->has('keterserapans')->get()->count();
+            return Siswa::where('siswa_sekolah', $npsn)->where('siswa_angkatan', $angkatan)->has('keterserapans')->count();
         } else {
             abort(403);
         }
@@ -434,7 +434,7 @@ class ExportExcelController extends Controller
         if (Gate::allows('roleAdmin')) {
             return Siswa::with('keterserapans')->where('siswa_sekolah', $npsn)->whereHas('keterserapans', function ($query) use ($id) {
                 $query->where("keterserapan_id", $id);
-            })->get()->count();
+            })->count();
         } else {
             abort(403);
         }
@@ -443,7 +443,7 @@ class ExportExcelController extends Controller
     public static function rekapSemuaTotal($npsn)
     {
         if (Gate::allows('roleAdmin')) {
-            return Siswa::where('siswa_sekolah', $npsn)->has('keterserapans')->get()->count();
+            return Siswa::where('siswa_sekolah', $npsn)->has('keterserapans')->count();
         } else {
             abort(403);
         }
