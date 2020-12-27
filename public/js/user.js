@@ -25,15 +25,16 @@ var table = $('#data_table_user_operator').DataTable({
     fixedHeader: true,
     processing: true,
     serverSide: true,
-    ajax: "tableoperator",
+    ajax: "/tableoperator",
     columns: [{
             data: 'DT_RowIndex',
-            name: 'DT_RowIndex',
-            orderable: false
+            name: 'id',
+            orderable: true,
+            searchable: false
         },
         {
             data: 'npsn',
-            name: 'npsn'
+            name: 'username'
         },
         {
             data: 'username',
@@ -45,7 +46,7 @@ var table = $('#data_table_user_operator').DataTable({
         },
         {
             data: 'sekolahs.sekolah_nama',
-            nama: 'sekolahs.sekolah_nama'
+            name: 'sekolahs.sekolah_nama'
         },
         {
             data: 'action',
@@ -59,12 +60,12 @@ var table = $('#data_table_user_operator').DataTable({
 var table2 = $('#data_table_user_admin').DataTable({
     processing: true,
     serverSide: true,
-    ajax: "tableadmin",
+    ajax: "/tableadmin",
     columns: [{
             data: 'DT_RowIndex',
-            name: 'no',
+            name: 'id',
             searchable: false,
-            orderable: false
+            orderable: true
         },
         {
             data: 'username',
@@ -298,10 +299,10 @@ $(function () {
                     contentType: false,
                     success: function (ress) {
                         if (ress === "save") {
-                            notifAlert1("Sukses", "Data keterserapan berhasil disimpan",
+                            notifAlert1("Sukses", "Data users berhasil disimpan",
                                 "success")
                         } else if (ress === "update") {
-                            notifAlert1("Sukses", "Data keterserapan berhasil diperbarui",
+                            notifAlert1("Sukses", "Data users berhasil diperbarui",
                                 "success")
                         }
                         $('#modal_dialog').modal('hide')

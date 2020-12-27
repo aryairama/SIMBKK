@@ -18,7 +18,7 @@ class AngkatanController extends Controller
     public function index(Request $request)
     {
         if (Gate::allows('roleAdminOpeartor')) {
-            $angkatan = Angkatan::orderBy('angkatan_id', 'ASC');
+            $angkatan = \DB::table('angkatan')->select(['angkatan_id','angkatan_ket']);
             if ($request->ajax()) {
                 return DataTables::of($angkatan)
                 ->addIndexColumn()

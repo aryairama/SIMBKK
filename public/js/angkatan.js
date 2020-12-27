@@ -1,12 +1,12 @@
 var table = $('#data_table_angkatan').DataTable({
     processing: true,
     serverSide: true,
-    ajax: "angkatan",
+    ajax: "/angkatan",
     columns: [{
             data: 'DT_RowIndex',
-            name: 'DT_RowIndex',
+            name: 'angkatan_id',
             searchable: false,
-            orderable: false
+            orderable: true
         },
         {
             data: 'angkatan_ket',

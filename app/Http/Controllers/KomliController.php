@@ -18,7 +18,7 @@ class KomliController extends Controller
     public function index(Request $request)
     {
         $this->authorize('roleAdminOpeartor');
-        $komli = Komli::orderBy('komli_id', 'ASC');
+        $komli = \DB::table('komli')->select(['komli_nama','komli_id']);
         if ($request->ajax()) {
             return DataTables::of($komli)
                 ->addIndexColumn()

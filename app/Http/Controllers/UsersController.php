@@ -149,7 +149,7 @@ class UsersController extends Controller
 
     public function datatableOperator(Request $request)
     {
-        $operator = User::with('sekolahs')->where('roles', '=', 'operator_sekolah')->orderBy('id', 'ASC')->get();
+        $operator = User::with('sekolahs')->where('roles', '=', 'operator_sekolah');
         if ($request->ajax()) {
             return DataTables::of($operator)
             ->addIndexColumn()
@@ -165,7 +165,7 @@ class UsersController extends Controller
 
     public function datatableAdmin(Request $request)
     {
-        $admin = User::where('roles', '=', 'admin')->orderBy('id', 'ASC');
+        $admin = User::where('roles', '=', 'admin');
         if ($request->ajax()) {
             return DataTables::of($admin)
             ->addIndexColumn()

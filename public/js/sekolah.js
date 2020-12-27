@@ -4,12 +4,12 @@ var table = $('#data_table_sekolah').DataTable({
     },
     processing: true,
     serverSide: true,
-    ajax: "sekolah",
+    ajax: "/sekolah",
     columns: [{
             data: 'DT_RowIndex',
-            name: 'DT_RowIndex',
+            name: 'npsn',
             searchable: false,
-            orderable: false
+            orderable: true
         },
         {
             data: 'npsn',

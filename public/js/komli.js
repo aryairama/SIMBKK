@@ -1,12 +1,12 @@
 var table = $('#data_table_komli').DataTable({
     processing: true,
     serverSide: true,
-    ajax: "komli",
+    ajax: "/komli",
     columns: [{
             data: 'DT_RowIndex',
-            name: 'DT_RowIndex',
+            name: 'komli_id',
             searchable: false,
-            orderable: false
+            orderable: true
         },
         {
             data: 'komli_nama',
