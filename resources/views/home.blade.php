@@ -9,6 +9,7 @@ Dashboard
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js"
     integrity="sha512-SuxO9djzjML6b9w9/I07IWnLnQhgyYVSpHZx0JV97kGBfTIsUYlWflyuW4ypnvhBrslz1yJ3R+S14fdCWmSmSA=="
     crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 @can('roleAdmin')
 <script src="{{ asset('js/home1.js') }}"></script>
 @elsecan('roleOperatorSekolah')
@@ -21,6 +22,7 @@ Dashboard
     crossorigin="anonymous" />
 <link rel="stylesheet" type="text/css"
     href="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.22/b-1.6.5/r-2.2.6/sc-2.0.3/datatables.min.css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 @endsection
 @section('content')
 <div class="page-header">
@@ -243,6 +245,36 @@ Dashboard
                 </h4>
             </div>
             <div class="card-body">
+                @can('roleAdminOpeartor')
+                <div class="row custom-filter">
+                    <div class="col-md-12">
+                        @can('roleAdmin')
+                        <div class="p-1">
+                            <select class="w-50" id="sekolah" name="sekolah">
+                                <option value="">-Sekolah-</option>
+                            </select>
+                        </div>
+                        @endcan
+                        @can('roleAdminOpeartor')
+                        <div class="p-1">
+                            <select class="w-50" id="angkatan" name="angkatan">
+                                <option value="">-Thn Angkatan-</option>
+                            </select>
+                        </div>
+                        <div class="p-1">
+                            <select class="w-50" id="komli" name="komli">
+                                <option value="">-Komli-</option>
+                            </select>
+                        </div>
+                        @endcan
+                        <div class="form-group p-1">
+                            <button class="btn btn-sm btn-primary filter-submit">FIlter</button>
+                            <button class="btn btn-sm btn-danger filter-reset">Reset</button>
+                        </div>
+                    </div>
+                </div>
+                <hr class="py-1">
+                @endcan
                 <div class="table-responsive">
                     <table id="data_table_home" class="display table table-hover nowrap  w-100 " cellspacing="0">
                         <thead>

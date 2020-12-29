@@ -39,6 +39,36 @@ show
                 </div>
             </div>
             <div class="card-body">
+                @can('roleAdminOpeartor')
+                <div class="row custom-filter">
+                    <div class="col-md-12">
+                        @can('roleAdmin')
+                        <div class="p-1">
+                            <select class="w-50" id="sekolah" name="sekolah">
+                                <option value="">-Sekolah-</option>
+                            </select>
+                        </div>
+                        @endcan
+                        @can('roleAdminOpeartor')
+                        <div class="p-1">
+                            <select class="w-50" id="angkatan" name="angkatan">
+                                <option value="">-Thn Angkatan-</option>
+                            </select>
+                        </div>
+                        <div class="p-1">
+                            <select class="w-50" id="komli" name="komli">
+                                <option value="">-Komli-</option>
+                            </select>
+                        </div>
+                        @endcan
+                        <div class="form-group p-1">
+                            <button class="btn btn-sm btn-primary filter-submit">FIlter</button>
+                            <button class="btn btn-sm btn-danger filter-reset">Reset</button>
+                        </div>
+                    </div>
+                </div>
+                <hr class="py-1">
+                @endcan
                 <div class="table-responsive">
                     <table id="data_table_siswa" class="display table table-hover nowrap  w-100 " cellspacing="0">
                         <thead>

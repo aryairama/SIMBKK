@@ -22,11 +22,39 @@ class SiswaController extends Controller
         $this->authorize('roleAdminOpeartor');
         if (Gate::allows('roleOperatorSekolah')) {
             $npsn = \Auth::user()->npsn;
-            $siswa = Siswa::with('sekolahs')->with('komlis')->with('keterserapans')->with('angkatans')->has('sekolahs')->has('komlis')->has('keterserapans')->has('angkatans')->whereHas('sekolahs', function ($query) use ($npsn) {
-                $query->where('npsn', $npsn);
-            });
+            if ($request->komli || $request->angkatan) {
+                $siswa = Siswa::with('sekolahs')->with('komlis')->with('keterserapans')->with('angkatans')
+                ->whereHas('komlis', function ($query) use ($request) {
+                    $query->where('komli_nama', 'LIKE', "%$request->komli%");
+                })
+                ->has('keterserapans')
+                ->whereHas('angkatans', function ($query) use ($request) {
+                    $query->where('angkatan_ket', 'LIKE', "%$request->angkatan%");
+                })
+                ->whereHas('sekolahs', function ($query) use ($npsn) {
+                    $query->where('npsn', $npsn);
+                });
+            } else {
+                $siswa = Siswa::with('sekolahs')->with('komlis')->with('keterserapans')->with('angkatans')->has('sekolahs')->has('komlis')->has('keterserapans')->has('angkatans')->whereHas('sekolahs', function ($query) use ($npsn) {
+                    $query->where('npsn', $npsn);
+                });
+            }
         } elseif (Gate::allows('roleAdmin')) {
-            $siswa = Siswa::with('sekolahs')->with('komlis')->with('keterserapans')->with('angkatans')->has('sekolahs')->has('komlis')->has('keterserapans')->has('angkatans');
+            if ($request->komli || $request->sekolah || $request->angkatan) {
+                $siswa = Siswa::with('sekolahs')->with('komlis')->with('keterserapans')->with('angkatans')
+                ->whereHas('sekolahs', function ($query) use ($request) {
+                    $query->where('sekolah_nama', 'LIKE', "%$request->sekolah%");
+                })
+                ->whereHas('komlis', function ($query) use ($request) {
+                    $query->where('komli_nama', 'LIKE', "%$request->komli%");
+                })
+                ->has('keterserapans')
+                ->whereHas('angkatans', function ($query) use ($request) {
+                    $query->where('angkatan_ket', 'LIKE', "%$request->angkatan%");
+                });
+            } else {
+                $siswa = Siswa::with('sekolahs')->with('komlis')->with('keterserapans')->with('angkatans')->has('sekolahs')->has('komlis')->has('keterserapans')->has('angkatans');
+            }
         }
         if ($request->ajax()) {
             return DataTables::of($siswa)
