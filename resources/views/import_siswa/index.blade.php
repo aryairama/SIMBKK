@@ -160,21 +160,10 @@ Import Data Siswa
         $('.card-footer').empty().append('<button class="btn btn-secondary save_import">Simpan</button>')
     }
     function seveImportSiswa(siswa){
-        let data = new FormData();
         $('.save_import').on('click',function(){
-            $.each(siswa,function(index,value){
-            data.append(`export_siswa[${index}][nisn]`,value.nisn)
-            data.append(`export_siswa[${index}][siswa_nama]`,value.siswa_nama)
-            data.append(`export_siswa[${index}][siswa_angkatan]`,value.siswa_angkatan)
-            data.append(`export_siswa[${index}][tempat_lahir]`,value.tempat_lahir)
-            data.append(`export_siswa[${index}][tanggal_lahir]`,value.tanggal_lahir)
-            data.append(`export_siswa[${index}][siswa_jk]`,value.siswa_jk)
-            data.append(`export_siswa[${index}][siswa_komli]`,value.siswa_komli)
-            data.append(`export_siswa[${index}][siswa_prestasi]`,value.siswa_prestasi)
-            data.append(`export_siswa[${index}][siswa_keterserapan]`,value.siswa_keterserapan)
-            data.append(`export_siswa[${index}][keterangan]`,value.keterangan)
-        })
-        data.append('_method',"POST")
+            let data = JSON.stringify(siswa)
+            let export_data = new FormData()
+            export_data.append('export_data',data)
             $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -183,7 +172,7 @@ Import Data Siswa
             $.ajax({
                 url: `{{ route('import.save') }}`,
                 type: "POST",
-                data : data,
+                data : export_data,
                 processData: false,
                 contentType: false,
                 beforeSend : function(){

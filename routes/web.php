@@ -11,13 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+Route::get('/', 'RouteCached@directLogin');
 Auth::routes();
-Route::get('/register', function () {
-    return redirect()->route('login');
-});
+Route::get('/register', 'RouteCached@directLogin');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', 'HomeController@index')->name('dashboard');
@@ -46,9 +42,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('import', 'ImportExcelController@index')->name('import.index');
     Route::post('import/preview', 'ImportExcelController@preview')->name('import.preview');
     Route::post('import/save', 'ImportExcelController@saveImportExcel')->name('import.save');
-    Route::get('import/format', function () {
-        return response()->download('data_siswa/format.xlsx');
-    })->name('import.format');
+    Route::get('import/format', 'RouteCached@importFormatExcel')->name('import.format');
     //Router ProfileSekolah
     Route::resource('profile', 'ProfileSekolahController');
 });

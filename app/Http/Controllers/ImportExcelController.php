@@ -130,8 +130,9 @@ class ImportExcelController extends Controller
 
     public function saveImportExcel(Request $request)
     {
+        $export_siswa = \json_decode($request->export_data, true);
         $data = array();
-        foreach ($request->export_siswa as $key => $export) {
+        foreach ($export_siswa as $key => $export) {
             $data[] = [
                 "nisn" => $export['nisn'],
                 "siswa_nama" => $export['siswa_nama'],
