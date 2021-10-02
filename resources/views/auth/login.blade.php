@@ -12,13 +12,16 @@
     <div class="container-fluid">
         <div class="row main-content bg-success text-center">
             <div class="col-md-4 text-center company__info d-lg-flex d-md-flex d-none">
-                <img src="{{ asset('/img/logo-simbkk.png') }}" alt="" class=" img-fluid ">
+                <img src="{{ asset('/img/logo-simbkk.png') }}" alt="" class="img-fluid ">
             </div>
             <div class="col-md-8 col-xs-12 col-sm-12 login_form ">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-xl-12 col-md-12 col-sm-12 col-12 pt-3">
-                            <p class="h2">Log In</p>
+                            <div class="logo-mobile d-md-none d-lg-none d-block mt-md-0 mt-lg-0 mt-n10 mx-auto w-50 h-50">
+                                <img src="{{ asset('img/logo-simbkk.png') }}" alt="" class="img-fluid">
+                            </div>
+                            <p class="h2 d-md-block d-lg-block d-none">Log In</p>
                         </div>
                     </div>
                     <form method="POST" action="{{ route('login') }}" class="form-group">

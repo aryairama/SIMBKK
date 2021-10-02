@@ -73,37 +73,41 @@ class ImportExcelController extends Controller
         foreach ($siswa_komli as $key => $komli) {
             $komlis[$key] = $komli['komli_id'];
         }
-        $preview = $reader->load($request->file('export_siswa'));
         try {
-            $previewExcel = $preview->getActiveSheet()->toArray();
+            $preview = $reader->load($request->file('export_siswa'));
+            $previewExcel = $preview->getActiveSheet();
         } catch (\Throwable $th) {
-            return \Response::json(500);
+            return \Response::json([
+                'status' => 'Error',
+                'message' => 'Max Load Memory Server',
+                'data' => null
+            ], 500);
         }
-        if (strval($previewExcel['0']['0']) !== "NISN"
-        || strval($previewExcel['0']['1']) !== "Nama"
-        || strval($previewExcel['0']['2']) !== "Angkatan"
-        || strval($previewExcel['0']['3']) !== "Tempat Lahir"
-        || strval($previewExcel['0']['4']) !== "Tanggl Lahir"
-        || strval($previewExcel['0']['5']) !== "Jenis kelamin"
-        || strval($previewExcel['0']['6']) !== "Komli"
-        || strval($previewExcel['0']['7']) !== "Prestasi"
-        || strval($previewExcel['0']['8']) !== "Keterserapan"
-        || strval($previewExcel['0']['9']) !== "Keterangan") {
+        if (strval($previewExcel->getCell('A1')->getValue()) !== "NISN"
+        || strval($previewExcel->getCell('B1')->getValue()) !== "Nama"
+        || strval($previewExcel->getCell('C1')->getValue()) !== "Angkatan"
+        || strval($previewExcel->getCell('D1')->getValue()) !== "Tempat Lahir"
+        || strval($previewExcel->getCell('E1')->getValue()) !== "Tanggl Lahir"
+        || strval($previewExcel->getCell('F1')->getValue()) !== "Jenis kelamin"
+        || strval($previewExcel->getCell('G1')->getValue()) !== "Komli"
+        || strval($previewExcel->getCell('H1')->getValue()) !== "Prestasi"
+        || strval($previewExcel->getCell('I1')->getValue()) !== "Keterserapan"
+        || strval($previewExcel->getCell('J1')->getValue()) !== "Keterangan") {
             return \Response::json(415);
-        } elseif (count($previewExcel) < 2) {
+        } elseif ($previewExcel->getHighestRow() < 2) {
             return \Response::json(501);
         }
-        for ($i = 1; $i < count($previewExcel); $i++) {
-            $nama[$i]['nisn'] = $previewExcel[$i]['0'];
-            $nama[$i]['siswa_nama'] = $previewExcel[$i]['1'];
-            $nama[$i]['siswa_angkatan'] = $previewExcel[$i]['2'];
-            $nama[$i]['tempat_lahir'] = $previewExcel[$i]['3'];
-            $nama[$i]['tanggal_lahir'] = $previewExcel[$i]['4'];
-            $nama[$i]['siswa_jk'] = $previewExcel[$i]['5'];
-            $nama[$i]['siswa_komli'] = $previewExcel[$i]['6'];
-            $nama[$i]['siswa_prestasi'] = $previewExcel[$i]['7'];
-            $nama[$i]['siswa_keterserapan'] = $previewExcel[$i]['8'];
-            $nama[$i]['keterangan'] = $previewExcel[$i]['9'];
+        for ($i = 1; $i < $previewExcel->getHighestRow(); $i++) {
+            $nama[$i]['nisn'] = $previewExcel->getCell('A'.($i+1))->getValue();
+            $nama[$i]['siswa_nama'] = $previewExcel->getCell('B'.($i+1))->getValue();
+            $nama[$i]['siswa_angkatan'] = $previewExcel->getCell('C'.($i+1))->getValue();
+            $nama[$i]['tempat_lahir'] = $previewExcel->getCell('D'.($i+1))->getValue();
+            $nama[$i]['tanggal_lahir'] = $previewExcel->getCell('E'.($i+1))->getValue();
+            $nama[$i]['siswa_jk'] = $previewExcel->getCell('F'.($i+1))->getValue();
+            $nama[$i]['siswa_komli'] = $previewExcel->getCell('G'.($i+1))->getValue();
+            $nama[$i]['siswa_prestasi'] = $previewExcel->getCell('H'.($i+1))->getValue();
+            $nama[$i]['siswa_keterserapan'] = $previewExcel->getCell('I'.($i+1))->getValue();
+            $nama[$i]['keterangan'] = $previewExcel->getCell('J'.($i+1))->getValue();
             if (!in_array($nama[$i]['siswa_angkatan'], $angkatans, true)
             || !in_array($nama[$i]['siswa_komli'], $komlis, true)
             || !in_array($nama[$i]['siswa_keterserapan'], $keterserapans, true)) {

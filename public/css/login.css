@@ -119,3 +119,8 @@ form {
     transform: translate(-50%, -50%);
     font: 14px arial;
 }
+
+.mt-n10,
+.my-n10 {
+    margin-top: -6rem !important
+}
