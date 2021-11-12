@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('npsn', 8);
+            $table->string('npsn', 8)->nullable();
             $table->foreign('npsn')->references('npsn')->on('sekolah')->onDelete('cascade')->onUpdate('cascade');
             $table->string('username', 10);
             $table->string('password');
